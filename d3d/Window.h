@@ -4,6 +4,7 @@
 #include "ChiliException.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Graphics.h"
 #include <optional>
 #include <memory>
 #include <string>
@@ -51,7 +52,8 @@ public:
 	//void EnableCursor() noexcept;
 	//void DisableCursor() noexcept;
 	//bool CursorEnabled() const noexcept;
-	//static std::optional<int> ProcessMessages() noexcept;
+	static std::optional<int> ProcessMessages() noexcept;
+	Graphics& Gfx();
 private:
 	//void ConfineCursor() noexcept;
 	//void FreeCursor() noexcept;
@@ -70,6 +72,7 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
+	std::unique_ptr<Graphics> pGfx;
 	//std::vector<BYTE> rawBuffer;
 	//std::string commandLine;
 };
