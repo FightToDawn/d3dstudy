@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ChiliWin.h"
+#include "ChiliException.h"
 #include <optional>
 #include <memory>
 #include <string>
@@ -8,6 +9,19 @@
 
 class Window
 {
+public:
+	class Exception : public ChiliException 
+	{
+	public:
+		Exception(int line, const char* file, HRESULT hr) noexcept;
+		const char* what() const noexcept override;
+		virtual const char* GetType() const noexcept;
+		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+		HRESULT GetErrorCode() const noexcept;
+		std::string GetErrorString() const noexcept;
+	private:
+		HRESULT hr;
+	};
 private:
 	//WindowClass类 单例管理注册/销毁窗口类
 	class WindowClass {
@@ -24,7 +38,10 @@ private:
 		HINSTANCE hInst;
 	};
 public:
-	Window(int width, int height, const char* name);
+	//如果加了noexcept 则表示我们知道这个函数不会抛出异常 
+	//直接告诉编译器不要在这个函数的调用堆栈里做异常相关的代码了 这样就能优化目标程序
+	//但是如果这个函数里还是发生了异常 则程序就会直接调用std::abort崩溃
+	Window(int width, int height, const char* name) /*noexcept*/;
 	~Window();
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
@@ -55,3 +72,5 @@ private:
 	//std::string commandLine;
 };
 
+#define CHWND_EXCEPT(hr) Window::Exception(__LINE__,__FILE__,hr)
+#define CHWND_LAST_EXCEPT() Window::Exception( __LINE__,__FILE__,GetLastError() )
