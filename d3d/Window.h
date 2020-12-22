@@ -2,6 +2,7 @@
 
 #include "ChiliWin.h"
 #include "ChiliException.h"
+#include "Keyboard.h"
 #include <optional>
 #include <memory>
 #include <string>
@@ -61,7 +62,7 @@ private:
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	LRESULT HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 public:
-	//Keyboard kbd;
+	Keyboard kbd;
 	//Mouse mouse;
 private:
 	//bool cursorEnabled = true;

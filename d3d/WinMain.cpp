@@ -11,7 +11,7 @@ int CALLBACK WinMain(
 	try
 	{
 		//´´½¨´°¿Ú
-		Window wnd(800, 300, "Donkey Fart Box");
+		Window wnd(800, 400, "Donkey Fart Box");
 
 		MSG msg;
 		BOOL gResult;
