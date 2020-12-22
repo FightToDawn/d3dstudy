@@ -11,9 +11,6 @@ int CALLBACK WinMain(
 	//创建窗口
 	Window wnd(800, 300, "Donkey Fart Box");
 
-	//创建窗口
-	Window wnd2(800, 300, "Donkey Fart Box2");
-
 	MSG msg;
 	BOOL gResult;
 	while ((gResult = GetMessage(&msg,nullptr,0,0)) > 0)
