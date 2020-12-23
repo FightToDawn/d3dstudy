@@ -13,17 +13,28 @@
 class Window
 {
 public:
-	class Exception : public ChiliException 
+	class Exception : public ChiliException
+	{
+		using ChiliException::ChiliException;
+	public:
+		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+	};
+	class HrException : public Exception
 	{
 	public:
-		Exception(int line, const char* file, HRESULT hr) noexcept;
+		HrException(int line, const char* file, HRESULT hr) noexcept;
 		const char* what() const noexcept override;
-		virtual const char* GetType() const noexcept;
-		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+		const char* GetType() const noexcept override;
 		HRESULT GetErrorCode() const noexcept;
-		std::string GetErrorString() const noexcept;
+		std::string GetErrorDescription() const noexcept;
 	private:
 		HRESULT hr;
+	};
+	class NoGfxException : public Exception
+	{
+	public:
+		using Exception::Exception;
+		const char* GetType() const noexcept override;
 	};
 private:
 	//WindowClass类 单例管理注册/销毁窗口类
@@ -77,5 +88,7 @@ private:
 	//std::string commandLine;
 };
 
-#define CHWND_EXCEPT(hr) Window::Exception(__LINE__,__FILE__,hr)
-#define CHWND_LAST_EXCEPT() Window::Exception( __LINE__,__FILE__,GetLastError() )
+// error exception helper macro
+#define CHWND_EXCEPT( hr ) Window::HrException( __LINE__,__FILE__,(hr) )
+#define CHWND_LAST_EXCEPT() Window::HrException( __LINE__,__FILE__,GetLastError() )
+#define CHWND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ )
