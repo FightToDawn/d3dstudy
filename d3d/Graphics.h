@@ -1,9 +1,11 @@
 #pragma once
 #include "ChiliWin.h"
 #include "ChiliException.h"
+
 #include <d3d11.h>
-#include <wrl.h>
 #include <vector>
+#include <wrl.h>
+
 #include "DxgiInfoManager.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
@@ -16,7 +18,7 @@ class Graphics
 public:
 	class Exception : public ChiliException
 	{
-		using ChiliException::ChiliException;
+		using ChiliException::ChiliException;//使用基类的构造函数
 	};
 	class HrException : public Exception
 	{
@@ -65,9 +67,12 @@ private:
 #ifndef NDEBUG
 	DxgiInfoManager infoManager;
 #endif
+	//这里使用ComPtr 而不使用C++的智能指针 因为有很多好处 
+	//ComPtr重载了 & 可以直接取到指针的指针  要注意的是&会先释放保存的东西 所以此时可以使用GetAddressOf()
+	//ComPtr更适合Com 有引用计数 多个指针可以指向同一个东西
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;//深度模板视图
 };
