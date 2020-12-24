@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "ChiliMath.h"
 #include <iterator>
-
+#include "imgui/imgui.h"
 
 App::App()
 	:
@@ -66,12 +66,27 @@ App::App()
 void App::DoFrame()
 {
 	const auto dt = timer.Mark();
-	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
+
+	if (wnd.kbd.KeyIsPressed(VK_SPACE)){
+		wnd.Gfx().DisableImgui();
+	}
+	else{
+		wnd.Gfx().EnableImgui();
+	}
+	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+
 	for (auto& d : drawables)
 	{
 		d->Update(dt);
 		d->Draw(wnd.Gfx());
 	}
+
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+
+	// present
 	wnd.Gfx().EndFrame();
 }
 
