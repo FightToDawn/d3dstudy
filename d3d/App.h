@@ -17,6 +17,6 @@ private:
 	Window wnd;	//定义Window时会在构造函数里创建窗口
 	ChiliTimer timer;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
-	bool show_demo_window = true;
+	float speed_factor = 1.0f;
 	static constexpr size_t nDrawables = 180;
 };
